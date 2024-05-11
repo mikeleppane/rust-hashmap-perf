@@ -258,14 +258,14 @@ pub fn custom_key_value_store_benchmark_for_u64_lookup(c: &mut Criterion) {
     group.sample_size(500);
     group.bench_function("best scenario", |b| {
         b.iter(|| {
-            b_kv.get(black_box(&0));
+            black_box(b_kv.get(&0));
         });
     });
 
     group.bench_function("worst scenario", |b| {
         let lookup = SIZE - 1;
         b.iter(|| {
-            b_kv.get(black_box(&lookup));
+            black_box(b_kv.get(&lookup));
         });
     });
 
@@ -291,13 +291,13 @@ pub fn custom_key_value_store_benchmark_for_string_lookup(c: &mut Criterion) {
     group.sample_size(500);
     group.bench_function("best scenario", |b| {
         b.iter(|| {
-            b_kv.get(black_box(&first_string));
+            black_box(b_kv.get(&first_string));
         });
     });
 
     group.bench_function("worst scenario", |b| {
         b.iter(|| {
-            b_kv.get(black_box(&last_string));
+            black_box(b_kv.get(&last_string));
         });
     });
 
@@ -324,15 +324,37 @@ pub fn custom_key_value_store_benchmark_for_iteration(c: &mut Criterion) {
     group.finish();
 }
 
+pub fn custom_key_value_store_benchmark_for_u64_lookup_by_index(c: &mut Criterion) {
+    let mut group = c.benchmark_group("key value store lookup for u64");
+
+    let mut b_kv = key_value_store::KeyValueStore::<u64, u8>::with_capacity(10);
+
+    const SIZE: u64 = 10;
+
+    for i in 0..SIZE {
+        b_kv.insert(i, 1);
+    }
+    group.sample_size(500);
+    group.bench_function("best scenario", |b| {
+        b.iter(|| {
+            black_box(b_kv.get_by_index(0));
+        });
+    });
+
+    group.bench_function("worst scenario", |b| {
+        let lookup = (SIZE - 1) as usize;
+        b.iter(|| {
+            black_box(b_kv.get_by_index(lookup));
+        });
+    });
+
+    group.finish();
+}
+
 criterion_group!(
     benches,
-    hashmap_benchmark_for_u8,
-    hashmap_benchmark_for_u64,
-    hashmap_benchmark_for_small_string,
-    hashmap_benchmark_for_large_string,
-    hashmap_benchmark_for_iteration,
-    hashmap_benchmark_for_u64_lookup,
     custom_key_value_store_benchmark_for_u64_lookup,
+    custom_key_value_store_benchmark_for_u64_lookup_by_index,
     custom_key_value_store_benchmark_for_string_lookup,
     custom_key_value_store_benchmark_for_iteration
 );

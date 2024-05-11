@@ -2,7 +2,7 @@ use smallvec::{smallvec, SmallVec};
 
 #[derive(Debug, Default)]
 pub struct KeyValueStore<K, V> {
-    data: SmallVec<[(K, V); 10]>,
+    data: SmallVec<[(K, V); 0]>,
 }
 
 impl<K, V> KeyValueStore<K, V>
@@ -12,7 +12,7 @@ where
 {
     pub fn new() -> Self {
         KeyValueStore {
-            data: smallvec![(Default::default(), Default::default()); 10],
+            data: smallvec![(Default::default(), Default::default()); 0],
         }
     }
 
@@ -33,6 +33,11 @@ where
             .iter()
             .find(|pair| &pair.0 == key)
             .map(|pair| &pair.1)
+    }
+
+    #[inline]
+    pub fn get_by_index(&self, index: usize) -> Option<&V> {
+        self.data.get(index).map(|pair| &pair.1)
     }
 
     #[inline]
