@@ -1,0 +1,33 @@
+[tasks.format]
+install_crate = "rustfmt"
+command = "cargo"
+args = ["fmt", "--", "--emit=files"]
+
+[tasks.qa]
+script = [
+    "echo \"Running cargo check\"",
+    "cargo check -q --all-features --target-dir=benches",
+    "cargo check -q --all-features --target-dir=key_value_store",
+    "echo \"Running cargo fmt\"",
+    "cargo fmt --manifest-path=key_value_store/Cargo.toml -- --check",
+    "cargo fmt -- --check benches/benchmark.rs",
+    "echo \"Running cargo clippy\"",
+    "cargo clippy --manifest-path=key_value_store/Cargo.toml -- -D warnings",
+    "cargo clippy -- -D warnings",
+    "echo \"Running cargo test\"",
+    "cargo test --manifest-path key_value_store/Cargo.toml",
+]
+
+[tasks.clean]
+command = "cargo"
+args = ["clean"]
+
+[tasks.build]
+command = "cargo"
+args = ["build"]
+dependencies = ["clean"]
+
+[tasks.test]
+command = "cargo"
+args = ["test"]
+dependencies = ["clean"]

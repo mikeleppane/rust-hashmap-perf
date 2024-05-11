@@ -1,0 +1,23 @@
+[package]
+name = "rust-perf-features"
+version = "0.1.0"
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+rand = "0.8"
+key_value_store = { path = "key_value_store" }
+
+[dev-dependencies]
+criterion = { version = "0.5", features = ["html_reports"] }
+hashbrown = "0.14"
+fxhash = "0.2"
+lazy_static = "1.4"
+fnv = "1.0"
+
+
+[[bench]]
+name = "benchmark"
+harness = false
+path = "benches/benchmark.rs"
