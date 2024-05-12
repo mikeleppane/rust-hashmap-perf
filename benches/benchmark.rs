@@ -239,7 +239,7 @@ pub fn custom_key_value_store_benchmark_for_u64_insert(c: &mut Criterion) {
     let mut group = c.benchmark_group("key value store insert for u64");
     group.sample_size(500);
     group.bench_function("key value store insert for u64", |b| {
-        let mut b_kv = key_value_store::KeyValueStore::<u64, u8>::with_capacity(1);
+        let mut b_kv = key_value_store::KeyValueStore::<_, _, 1>::new();
         b.iter(|| b_kv.insert(black_box(1u64), 0u8));
     });
     group.finish();
@@ -248,7 +248,7 @@ pub fn custom_key_value_store_benchmark_for_u64_insert(c: &mut Criterion) {
 pub fn custom_key_value_store_benchmark_for_u64_lookup(c: &mut Criterion) {
     let mut group = c.benchmark_group("key value store lookup for u64");
 
-    let mut b_kv = key_value_store::KeyValueStore::<u64, u8>::with_capacity(10);
+    let mut b_kv = key_value_store::KeyValueStore::<_, _, 1>::new();
 
     const SIZE: u64 = 10;
 
@@ -275,7 +275,7 @@ pub fn custom_key_value_store_benchmark_for_u64_lookup(c: &mut Criterion) {
 pub fn custom_key_value_store_benchmark_for_string_lookup(c: &mut Criterion) {
     let mut group = c.benchmark_group("key value store lookup for string");
 
-    let mut b_kv = key_value_store::KeyValueStore::<String, u8>::with_capacity(10);
+    let mut b_kv = key_value_store::KeyValueStore::<_, _, 10>::new();
 
     const SIZE: u64 = 10;
 
@@ -307,7 +307,7 @@ pub fn custom_key_value_store_benchmark_for_string_lookup(c: &mut Criterion) {
 pub fn custom_key_value_store_benchmark_for_iteration(c: &mut Criterion) {
     let mut group = c.benchmark_group("key value store iteration");
 
-    let mut b_kv = key_value_store::KeyValueStore::<u64, u8>::with_capacity(10);
+    let mut b_kv = key_value_store::KeyValueStore::<_, _, 10>::new();
 
     b_kv.insert(u64::MAX, 1);
 
@@ -327,7 +327,7 @@ pub fn custom_key_value_store_benchmark_for_iteration(c: &mut Criterion) {
 pub fn custom_key_value_store_benchmark_for_u64_lookup_by_index(c: &mut Criterion) {
     let mut group = c.benchmark_group("key value store lookup for u64");
 
-    let mut b_kv = key_value_store::KeyValueStore::<u64, u8>::with_capacity(10);
+    let mut b_kv = key_value_store::KeyValueStore::<_, _, 10>::new();
 
     const SIZE: u64 = 10;
 
